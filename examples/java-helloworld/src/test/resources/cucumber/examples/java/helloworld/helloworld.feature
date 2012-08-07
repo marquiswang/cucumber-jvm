@@ -26,3 +26,8 @@ Feature: Hello World
     Given today is "Dec 6, 2012"
     And I did laundry 2 days ago
     Then my laundry day must have been "Dec 4, 2012"
+
+  Scenario: List
+    Given there are walls to the EAST,SOUTH
+    When I look for directions to move
+    Then I will be able to move to the NORTH and WEST

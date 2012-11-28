@@ -41,7 +41,7 @@ public class DataTable {
     }
 
     private static DataTable create(List<?> raw, Locale locale, String dateFormat, String... columnNames) {
-        ParameterInfo parameterInfo = new ParameterInfo(null, dateFormat, null, null);
+        ParameterInfo parameterInfo = ParameterInfo.builder(null).setFormat(dateFormat).build();
         TableConverter tableConverter = new TableConverter(new LocalizedXStreams(Thread.currentThread().getContextClassLoader()).get(locale), parameterInfo);
         return tableConverter.toTable(raw, columnNames);
     }

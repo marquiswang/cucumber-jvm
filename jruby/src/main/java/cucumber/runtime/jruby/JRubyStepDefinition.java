@@ -49,7 +49,7 @@ public class JRubyStepDefinition implements StepDefinition {
 
     @Override
     public ParameterInfo getParameterType(int n, Type argumentType) {
-        return new ParameterInfo(argumentType, null, null, null);
+        return ParameterInfo.builder(argumentType).build();
     }
 
     @Override

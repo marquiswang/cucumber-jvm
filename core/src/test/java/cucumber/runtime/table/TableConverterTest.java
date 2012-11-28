@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 public class TableConverterTest {
 
     private static final String YYYY_MM_DD = "yyyy-MM-dd";
-    private static final ParameterInfo PARAMETER_INFO = new ParameterInfo(null, YYYY_MM_DD, null, null);
+    private static final ParameterInfo PARAMETER_INFO = ParameterInfo.builder(null).setFormat(YYYY_MM_DD).build();
 
     @Test
     public void converts_table_of_single_column_to_list_of_integers() {

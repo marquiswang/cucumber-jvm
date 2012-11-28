@@ -20,8 +20,6 @@ import java.util.Locale;
  * This class composes all interesting parameter information into one object.
  */
 public class ParameterInfo {
-    public static final String DEFAULT_DELIMITER = ",\\s?";
-
     private final Type type;
     private final String format;
     private final String delimiter;
@@ -32,19 +30,17 @@ public class ParameterInfo {
         Type[] genericParameterTypes = method.getGenericParameterTypes();
         Annotation[][] annotations = method.getParameterAnnotations();
         for (int i = 0; i < genericParameterTypes.length; i++) {
-            String dateFormat = null;
-            String delimiter = DEFAULT_DELIMITER;
-            Transformer transformer = null;
+            Builder parameterInfo = new Builder(genericParameterTypes[i]);
             for (Annotation annotation : annotations[i]) {
                 if (annotation instanceof Format) {
-                    dateFormat = ((Format) annotation).value();
+                    parameterInfo.setFormat(((Format) annotation).value());
                 }
                 if (annotation instanceof Delimiter) {
-                    delimiter = ((Delimiter) annotation).value();
+                    parameterInfo.setDelimiter(((Delimiter) annotation).value());
                 }
                 if (annotation instanceof Transform) {
                     try {
-                        transformer = ((Transform) annotation).value().newInstance();
+                        parameterInfo.setTransformer(((Transform) annotation).value().newInstance());
                     } catch (InstantiationException e) {
                         throw new CucumberException(e);
                     } catch (IllegalAccessException e) {
@@ -52,12 +48,48 @@ public class ParameterInfo {
                     }
                 }
             }
-            result.add(new ParameterInfo(genericParameterTypes[i], dateFormat, delimiter, transformer));
+            result.add(parameterInfo.build());
         }
         return result;
     }
 
-    public ParameterInfo(Type type, String format, String delimiter, Transformer transformer) {
+    public static Builder builder(Type type) {
+        return new Builder(type);
+    }
+
+    public static class Builder {
+        public static final String DEFAULT_DELIMITER = ",\\s?";
+
+        private Type type = null;
+        private String format = null;
+        private String delimiter = DEFAULT_DELIMITER;
+        private Transformer transformer = null;
+
+        private Builder(Type type) {
+            this.type = type;
+        }
+
+        public ParameterInfo build() {
+            return new ParameterInfo(type, format, delimiter, transformer);
+        }
+
+        public Builder setFormat(String format) {
+            this.format = format;
+            return this;
+        }
+
+        public Builder setDelimiter(String delimiter) {
+            this.delimiter = delimiter;
+            return this;
+        }
+
+        public Builder setTransformer(Transformer transformer) {
+            this.transformer = transformer;
+            return this;
+        }
+    }
+
+    private ParameterInfo(Type type, String format, String delimiter, Transformer transformer) {
         this.type = type;
         this.format = format;
         this.delimiter = delimiter;

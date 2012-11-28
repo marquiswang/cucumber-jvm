@@ -72,7 +72,7 @@ public class IokeStepDefinition implements StepDefinition {
             IokeObject argLength = (IokeObject) backend.invoke(argNames, "length");
             int groupCount = Integer.parseInt(argLength.toString()); // Not sure how to do this properly...
 
-            return listOf(groupCount, new ParameterInfo(String.class, null, null, null));
+            return listOf(groupCount, ParameterInfo.builder(String.class).build());
         } catch (ControlFlow controlFlow) {
             throw new CucumberException("Couldn't inspect arity of stepdef", controlFlow);
         }

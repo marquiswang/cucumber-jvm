@@ -55,7 +55,7 @@ public class GroovyStepDefinition implements StepDefinition {
         Class[] parameterTypes = body.getParameterTypes();
         List<ParameterInfo> result = new ArrayList<ParameterInfo>(parameterTypes.length);
         for (Class parameterType : parameterTypes) {
-            result.add(new ParameterInfo(parameterType, null, null, null));
+            result.add(ParameterInfo.builder(parameterType).build());
         }
         return result;
     }

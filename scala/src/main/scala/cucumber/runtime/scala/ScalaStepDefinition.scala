@@ -21,8 +21,8 @@ class ScalaStepDefinition(frame:StackTraceElement, name:String, pattern:String, 
 
   // TODO: get rid of Transform.scala and leave transformation to be done by core. The correct implementation is commented out
   // below until this is fixed.
-  // def getParameterType(index: Int, javaType: Type) = new ParameterInfo(parameterInfos.get(index), null)
-  def getParameterType(index: Int, javaType: Type) = new ParameterInfo(classOf[String], null, null, null)
+  // def getParameterType(index: Int, javaType: Type) = ParameterInfo.builder(parameterInfos.get(index)).build()
+  def getParameterType(index: Int, javaType: Type) = ParameterInfo.builder(classOf[String]).build()
 
   def execute(i18n: I18n, args: Array[AnyRef]) { f(args.toList) }
 

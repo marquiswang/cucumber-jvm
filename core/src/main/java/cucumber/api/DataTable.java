@@ -85,7 +85,7 @@ public class DataTable {
      */
     public List<Map<String, String>> asMaps() {
         return asList(new TypeReference<Map<String, String>>() {
-        }.getType());
+        }.getType(), false);
     }
 
     /**
@@ -99,8 +99,8 @@ public class DataTable {
      * @param <T>  the type of each object
      * @return a list of objects
      */
-    public <T> List<T> asList(Type type) {
-        List<T> result = tableConverter.toList(type, this);
+    public <T> List<T> asList(Type type, boolean transpose) {
+        List<T> result = tableConverter.toList(type, transpose, this);
         return result;
     }
 
@@ -188,4 +188,7 @@ public class DataTable {
         return result;
     }
 
+    public DataTable transpose() {
+        return null;  //To change body of created methods use File | Settings | File Templates.
+    }
 }

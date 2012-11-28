@@ -44,6 +44,9 @@ public class TableConverter {
     }
 
     public <T> T convert(Type type, DataTable dataTable) {
+        if (parameterInfo.getTranspose()) {
+            dataTable = dataTable.transpose();
+        }
         try {
             xStream.setParameterType(parameterInfo);
             if (type == null || (type instanceof Class && ((Class) type).isAssignableFrom(DataTable.class))) {
@@ -150,7 +153,7 @@ public class TableConverter {
     /**
      * Converts a DataTable to a List of objects.
      */
-    public <T> List<T> toList(final Type type, DataTable dataTable) {
+    public <T> List<T> toList(final Type type, boolean transpose, DataTable dataTable) {
         if (type == null) {
             return convert(new GenericListType(new GenericListType(String.class)), dataTable);
         }

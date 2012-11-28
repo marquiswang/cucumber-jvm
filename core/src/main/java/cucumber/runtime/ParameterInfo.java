@@ -1,9 +1,6 @@
 package cucumber.runtime;
 
-import cucumber.api.Format;
-import cucumber.api.Delimiter;
-import cucumber.api.Transform;
-import cucumber.api.Transformer;
+import cucumber.api.*;
 import cucumber.deps.com.thoughtworks.xstream.annotations.XStreamConverter;
 import cucumber.deps.com.thoughtworks.xstream.converters.SingleValueConverter;
 import cucumber.runtime.xstream.LocalizedXStreams;
@@ -24,6 +21,7 @@ public class ParameterInfo {
     private final String format;
     private final String delimiter;
     private final Transformer transformer;
+    private final boolean transpose;
 
     public static List<ParameterInfo> fromMethod(Method method) {
         List<ParameterInfo> result = new ArrayList<ParameterInfo>();
@@ -37,6 +35,9 @@ public class ParameterInfo {
                 }
                 if (annotation instanceof Delimiter) {
                     parameterInfo.setDelimiter(((Delimiter) annotation).value());
+                }
+                if (annotation instanceof Transpose) {
+                    parameterInfo.setTranspose(true);
                 }
                 if (annotation instanceof Transform) {
                     try {
@@ -64,13 +65,14 @@ public class ParameterInfo {
         private String format = null;
         private String delimiter = DEFAULT_DELIMITER;
         private Transformer transformer = null;
+        private boolean transpose = false;
 
         private Builder(Type type) {
             this.type = type;
         }
 
         public ParameterInfo build() {
-            return new ParameterInfo(type, format, delimiter, transformer);
+            return new ParameterInfo(type, format, delimiter, transformer, transpose);
         }
 
         public Builder setFormat(String format) {
@@ -87,13 +89,19 @@ public class ParameterInfo {
             this.transformer = transformer;
             return this;
         }
+
+        public Builder setTranspose(boolean transpose) {
+            this.transpose = transpose;
+            return this;
+        }
     }
 
-    private ParameterInfo(Type type, String format, String delimiter, Transformer transformer) {
+    private ParameterInfo(Type type, String format, String delimiter, Transformer transformer, boolean transpose) {
         this.type = type;
         this.format = format;
         this.delimiter = delimiter;
         this.transformer = transformer;
+        this.transpose = transpose;
     }
 
     public Class<?> getRawType() {
@@ -176,5 +184,9 @@ public class ParameterInfo {
 
     public String getFormat() {
         return format;
+    }
+
+    public boolean getTranspose() {
+        return transpose;
     }
 }
